@@ -73,7 +73,14 @@ function Logado() {
       {data?.users?.pageInfo?.hasPreviousPage === true ? <button onClick={anterior}>anterior</button> : null}
       {data?.users?.pageInfo?.hasNextPage === true ? <button onClick={proximo}>proximo</button> : null}
       <div className='botao-container'>
-        <button className='botao'>+</button>
+        <button
+          className='botao'
+          onClick={() => {
+            navigate('/cadastro');
+          }}
+        >
+          +
+        </button>
       </div>
     </div>
   );
