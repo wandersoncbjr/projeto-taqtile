@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { gql, useMutation } from '@apollo/client';
 import './index.css';
+import { useNavigate } from 'react-router-dom';
 
 function Cadastro() {
   const [mostraError, setMostraError] = useState(false);
@@ -9,6 +11,32 @@ function Cadastro() {
   const [telefone, setTelefone] = useState('');
   const [dataNascimento, setDataNascimento] = useState('');
   const [nomeCompleto, setNomeCompleto] = useState('');
+  const [valorSelecionado, setValorSelecionado] = useState('');
+
+  const CADASTRO_MUTATION = gql`
+    mutation Mutation($data: UserInput!) {
+      createUser(data: $data) {
+        id
+        name
+        phone
+        birthDate
+        email
+        role
+      }
+    }
+  `;
+  const navigate = useNavigate();
+  const token = localStorage.getItem('token');
+  const [Mutation, { error, loading }] = useMutation(CADASTRO_MUTATION, {
+    onCompleted: () => {
+      navigate('/home');
+    },
+    context: {
+      headers: {
+        Authorization: `${token}`,
+      },
+    },
+  });
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -31,8 +59,8 @@ function Cadastro() {
       }
       if (!telefone) {
         erros.push('O telefone é obrigatório.');
-      } else if (!/^\(\d{2}\)\s\d{4,5}-\d{4}$/.test(telefone)) {
-        erros.push('Telefone inválido. O formato deve ser (XX) XXXXX-XXXX.');
+      } else if (!/^[0-9]+$/.test(telefone)) {
+        erros.push('Telefone inválido.');
       }
 
       if (!dataNascimento) {
@@ -57,6 +85,10 @@ function Cadastro() {
           erros.push('Preencha o nome completo.');
         }
       }
+
+      if (!valorSelecionado) {
+        erros.push('A sua função é obrigatória.');
+      }
       return erros;
     }
 
@@ -65,6 +97,18 @@ function Cadastro() {
       setErros(erros);
       setMostraError(true);
     } else {
+      Mutation({
+        variables: {
+          data: {
+            birthDate: dataNascimento,
+            email: email,
+            name: nomeCompleto,
+            password: senha,
+            phone: telefone,
+            role: valorSelecionado,
+          },
+        },
+      });
       setMostraError(false);
     }
   }
@@ -86,10 +130,15 @@ function Cadastro() {
       case 'nome':
         setNomeCompleto(event.target.value);
         break;
-      default:
+      case 'role':
+        setValorSelecionado(event.target.value);
+        break;
     }
   }
 
+  function handleSelectChange(event: { target: { value: React.SetStateAction<string> } }) {
+    setValorSelecionado(event.target.value);
+  }
   return (
     <div className='container-cadastro'>
       <form className='form-cadastro' onSubmit={handleSubmit}>
@@ -100,6 +149,16 @@ function Cadastro() {
                 <li>{erro}</li>
               ))}
             </ul>
+          </div>
+        ) : null}
+        {error ? (
+          <div className='error-cadastro'>
+            <p>{error?.graphQLErrors[0].message}</p>
+          </div>
+        ) : null}
+        {loading ? (
+          <div>
+            <p>carregando...</p>
           </div>
         ) : null}
         <label htmlFor='email'>E-mail:</label>
@@ -114,11 +173,14 @@ function Cadastro() {
         <input type='date' name='data' value={dataNascimento} onChange={handleInputChange} />
         <div className='container-botao'>
           <label htmlFor='role'>Função:</label>
-          <select name='role'>
+          <select name='role' value={valorSelecionado} onChange={handleSelectChange}>
+            <option value='' disabled selected>
+              Selecione uma opção
+            </option>
             <option value='admin'>Administrador</option>
             <option value='user'>Usuário</option>
           </select>
-          <input type='submit' value='Cadastrar' className='cadastro-btn' />
+          <input type='submit' value='Cadastrar' className='cadastro-btn' disabled={loading} />
         </div>
       </form>
     </div>
