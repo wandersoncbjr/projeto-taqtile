@@ -15,9 +15,8 @@ const client = new ApolloClient({
 
 const router = createBrowserRouter([
   { path: '/login', element: <Login /> },
-  { path: '/home', element: <Logado /> },
+  { path: '/', element: <Logado /> },
   { path: '/cadastro', element: <Cadastro /> },
-  { path: '/detalhes', element: <Detalhes /> },
   { path: '/user/:userId', element: <Detalhes /> },
 ]);
 
