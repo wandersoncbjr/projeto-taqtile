@@ -18,6 +18,7 @@ const router = createBrowserRouter([
   { path: '/home', element: <Logado /> },
   { path: '/cadastro', element: <Cadastro /> },
   { path: '/detalhes', element: <Detalhes /> },
+  { path: '/user/:userId', element: <Detalhes /> },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
