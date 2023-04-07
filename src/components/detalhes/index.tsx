@@ -17,9 +17,8 @@ const GET_USERS = gql`
 function Detalhes() {
   const token = localStorage.getItem('token');
   const { userId } = useParams();
-  console.log(userId);
 
-  const { data } = useQuery(GET_USERS, {
+  const { data, loading, error } = useQuery(GET_USERS, {
     variables: { _id: userId },
     context: {
       headers: {
@@ -27,8 +26,6 @@ function Detalhes() {
       },
     },
   });
-
-  console.log(data);
 
   return (
     <div className='item-logado'>
@@ -40,9 +37,9 @@ function Detalhes() {
           <p>Telefone: {data.user.phone}</p>
           <p>Data de nascimento: {data.user.birthDate}</p>
         </>
-      ) : (
-        <p>Carregando...</p>
-      )}
+      ) : null}
+      {loading ? <p>carregando...</p> : null}
+      {error ? <p>{error.message}</p> : null}
     </div>
   );
 }
