@@ -59,12 +59,14 @@ function Logado() {
   return (
     <div className='container-logado'>
       {data?.users?.nodes?.map((data: User) => (
-        <div className='item-logado'>
+        <div
+          className='item-logado'
+          onClick={() => {
+            navigate(`user/${data.id}`);
+          }}
+        >
           <p>Nome: {data.name}</p>
           <p>Email: {data.email}</p>
-          <p>ID: {data.id}</p>
-          <p>Telefone: {data.phone}</p>
-          <p>data de nascimento: {data.birthDate}</p>
         </div>
       ))}
       <p>
@@ -72,6 +74,16 @@ function Logado() {
       </p>
       {data?.users?.pageInfo?.hasPreviousPage === true ? <button onClick={anterior}>anterior</button> : null}
       {data?.users?.pageInfo?.hasNextPage === true ? <button onClick={proximo}>proximo</button> : null}
+      <div className='botao-container'>
+        <button
+          className='botao'
+          onClick={() => {
+            navigate('/cadastro');
+          }}
+        >
+          +
+        </button>
+      </div>
     </div>
   );
 }
