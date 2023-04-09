@@ -24,6 +24,12 @@
   transition: all ease 0.3s;
 }
 
-.item-logado:hover{
+.item-logado:hover {
   transform: scale(1);
+}
+
+.botao-container {
+  position: fixed;
+  bottom: 20px;
+  right: 85%;
 }
