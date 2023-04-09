@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { gql, useMutation } from '@apollo/client';
 import './index.css';
 import { useNavigate } from 'react-router-dom';
+import { Titulo } from '../styles/h1.style';
+import { Button } from '../styles/button.style';
+import { Div, Input, Label, Span } from '../styles/form.style';
 
 function Cadastro() {
   const [mostraError, setMostraError] = useState(false);
@@ -139,40 +142,74 @@ function Cadastro() {
   function handleSelectChange(event: { target: { value: React.SetStateAction<string> } }) {
     setValorSelecionado(event.target.value);
   }
+
   return (
-    <div className='container-cadastro'>
+    <Div>
       <form className='form-cadastro' onSubmit={handleSubmit}>
+        <Titulo>Criar usuário</Titulo>
         {mostraError ? (
-          <div className='error-cadastro'>
-            <ul>
-              {erros.map((erro) => (
-                <li>{erro}</li>
-              ))}
-            </ul>
-          </div>
+          <Span>
+            <div>
+              <ul>
+                {erros.map((erro) => (
+                  <li>{erro}</li>
+                ))}
+              </ul>
+            </div>
+          </Span>
         ) : null}
         {error ? (
-          <div className='error-cadastro'>
-            <p>{error?.graphQLErrors[0].message}</p>
-          </div>
+          <Span>
+            <div>
+              <p>{error?.graphQLErrors[0].message}</p>
+            </div>
+          </Span>
         ) : null}
         {loading ? (
           <div>
             <p>carregando...</p>
           </div>
         ) : null}
-        <label htmlFor='email'>E-mail:</label>
-        <input type='email' value={email} onChange={handleInputChange} name='email' placeholder='Digite seu e-mail' />
-        <label htmlFor='nome'>Nome:</label>
-        <input type='text' name='nome' value={nomeCompleto} onChange={handleInputChange} placeholder='Digite seu nome e sobrenome' />
-        <label htmlFor='telefone'>Telefone:</label>
-        <input type='text' name='telefone' value={telefone} onChange={handleInputChange} placeholder='(XX) XXXXX-XXXX' />
-        <label htmlFor='senha'>Senha:</label>
-        <input type='password' value={senha} onChange={handleInputChange} name='senha' placeholder='Digite sua senha' />
-        <label htmlFor='data'>Data de nascimento:</label>
-        <input type='date' name='data' value={dataNascimento} onChange={handleInputChange} />
+        <Label htmlFor='email'>E-mail:</Label>
+        <Input
+          error={mostraError}
+          type='email'
+          value={email}
+          onChange={handleInputChange}
+          name='email'
+          placeholder='Digite seu e-mail'
+        ></Input>
+        <Label htmlFor='nome'>Nome:</Label>
+        <Input
+          error={mostraError}
+          type='text'
+          name='nome'
+          value={nomeCompleto}
+          onChange={handleInputChange}
+          placeholder='Digite seu nome e sobrenome'
+        ></Input>
+        <Label htmlFor='telefone'>Telefone:</Label>
+        <Input
+          error={mostraError}
+          type='text'
+          name='telefone'
+          value={telefone}
+          onChange={handleInputChange}
+          placeholder='(XX) XXXXX-XXXX'
+        ></Input>
+        <Label htmlFor='senha'>Senha:</Label>
+        <Input
+          error={mostraError}
+          type='password'
+          value={senha}
+          onChange={handleInputChange}
+          name='senha'
+          placeholder='Digite sua senha'
+        ></Input>
+        <Label htmlFor='data'>Data de nascimento:</Label>
+        <Input error={mostraError} type='date' name='data' value={dataNascimento} onChange={handleInputChange}></Input>
         <div className='container-botao'>
-          <label htmlFor='role'>Função:</label>
+          <Label htmlFor='role'>Função:</Label>
           <select name='role' value={valorSelecionado} onChange={handleSelectChange}>
             <option value='' disabled selected>
               Selecione uma opção
@@ -180,10 +217,10 @@ function Cadastro() {
             <option value='admin'>Administrador</option>
             <option value='user'>Usuário</option>
           </select>
-          <input type='submit' value='Cadastrar' className='cadastro-btn' disabled={loading} />
+          <Button type='submit' value='Cadastrar' className='cadastro-btn' disabled={loading}></Button>
         </div>
       </form>
-    </div>
+    </Div>
   );
 }
 

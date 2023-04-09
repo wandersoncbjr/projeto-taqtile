@@ -1,5 +1,6 @@
 import { useQuery, gql } from '@apollo/client';
 import { useParams } from 'react-router-dom';
+import { Div, Usuario } from '../styles/form.style';
 
 const GET_USERS = gql`
   query User($_id: ID!) {
@@ -28,19 +29,22 @@ function Detalhes() {
   });
 
   return (
-    <div className='item-logado'>
-      {data ? (
-        <>
-          <p>Nome: {data.user.name}</p>
-          <p>Email: {data.user.email}</p>
-          <p>ID: {data.user.id}</p>
-          <p>Telefone: {data.user.phone}</p>
-          <p>Data de nascimento: {data.user.birthDate}</p>
-        </>
-      ) : null}
-      {loading ? <p>carregando...</p> : null}
-      {error ? <p>{error.message}</p> : null}
-    </div>
+    <Div>
+      <Usuario>
+        {data ? (
+          <>
+            <h1>INFORMAÇÃO DO USUÁRIO</h1>
+            <h3>Nome: {data.user.name}</h3>
+            <h3>Email: {data.user.email}</h3>
+            <h3>ID: {data.user.id}</h3>
+            <h3>Telefone: {data.user.phone}</h3>
+            <h3>Data de nascimento: {data.user.birthDate}</h3>
+          </>
+        ) : null}
+        {loading ? <p>carregando...</p> : null}
+        {error ? <p>{error.message}</p> : null}
+      </Usuario>
+    </Div>
   );
 }
 

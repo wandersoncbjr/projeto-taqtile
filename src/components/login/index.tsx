@@ -3,6 +3,9 @@ import { useState } from 'react';
 import React from 'react';
 import { useMutation, gql } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
+import { Titulo } from '../styles/h1.style';
+import { Button } from '../styles/button.style';
+import { Div, Input, Span } from '../styles/form.style';
 
 const LOGIN_MUTATION = gql`
   mutation login($login: LoginInput!) {
@@ -76,24 +79,28 @@ function Login() {
   }
 
   return (
-    <div className='login-container'>
+    <Div>
       <form onSubmit={handleSubmit} className='form-login'>
         <header>
-          <h1>Bem vindo(a) à Taqtile!</h1>
+          <Titulo>Bem vindo(a) à Taqtile!</Titulo>
         </header>
         {mostraError ? (
-          <div className='error-login'>
-            <ul>
-              {erros.map((erro) => (
-                <li>{erro}</li>
-              ))}
-            </ul>
-          </div>
+          <Span>
+            <div className='error-login'>
+              <ul>
+                {erros.map((erro) => (
+                  <li>{erro}</li>
+                ))}
+              </ul>
+            </div>
+          </Span>
         ) : null}
         {error ? (
-          <div className='error-login'>
-            <p>{error.message}</p>
-          </div>
+          <Span>
+            <div className='error-login'>
+              <p>{error.message}</p>
+            </div>
+          </Span>
         ) : null}
         {loading ? (
           <div>
@@ -101,12 +108,26 @@ function Login() {
           </div>
         ) : null}
         <label htmlFor='email'>E-mail</label>
-        <input type='email' value={email} onChange={handleInputChange} name='email' placeholder='Digite seu e-mail' />
+        <Input
+          type='email'
+          error={mostraError}
+          value={email}
+          onChange={handleInputChange}
+          name='email'
+          placeholder='Digite seu e-mail'
+        ></Input>
         <label htmlFor='senha'>Senha</label>
-        <input type='password' value={senha} onChange={handleInputChange} name='senha' placeholder='Digite sua senha' />
-        <input type='submit' value='Acessar' className='btn-login' disabled={loading} />
+        <Input
+          type='password'
+          error={mostraError}
+          value={senha}
+          onChange={handleInputChange}
+          name='senha'
+          placeholder='Digite sua senha'
+        ></Input>
+        <Button type='submit' value='Acessar' className='btn-login' disabled={loading}></Button>
       </form>
-    </div>
+    </Div>
   );
 }
 

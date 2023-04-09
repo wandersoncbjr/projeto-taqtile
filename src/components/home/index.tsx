@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import './index.css';
 import { useQuery, gql } from '@apollo/client';
 import { useState } from 'react';
+import { ButtoCotainer, Button } from '../styles/button.style';
 
 const GET_USERS = gql`
   query Users($offset: Int, $limit: Int) {
@@ -33,7 +34,7 @@ function Logado() {
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
   const [offset, setOffset] = useState(0);
-  const [limit, setLimit] = useState(15);
+  const [limit, setLimit] = useState(12);
   const { data } = useQuery(GET_USERS, {
     variables: { offset: offset, limit: limit },
     context: {
@@ -49,41 +50,53 @@ function Logado() {
   }
 
   function proximo() {
-    setOffset(offset + 15);
+    setOffset(offset + 12);
   }
 
   function anterior() {
-    setOffset(offset - 15);
+    setOffset(offset - 12);
   }
 
   return (
-    <div className='container-logado'>
-      {data?.users?.nodes?.map((data: User) => (
-        <div
-          className='item-logado'
-          onClick={() => {
-            navigate(`user/${data.id}`);
-          }}
-        >
-          <p>Nome: {data.name}</p>
-          <p>Email: {data.email}</p>
+    <div>
+      <div className='container-logado'>
+        {data?.users?.nodes?.map((data: User) => (
+          <div
+            className='item-logado'
+            onClick={() => {
+              navigate(`user/${data.id}`);
+            }}
+          >
+            <p>Nome: {data.name}</p>
+            <p>Email: {data.email}</p>
+          </div>
+        ))}
+        <p></p>
+
+        <div className='botao-container'>
+          <button
+            className='botao'
+            onClick={() => {
+              navigate('/cadastro');
+            }}
+          >
+            +
+          </button>
         </div>
-      ))}
-      <p>
-        Página {Math.floor(offset / limit) + 1} de {paginas}
-      </p>
-      {data?.users?.pageInfo?.hasPreviousPage === true ? <button onClick={anterior}>anterior</button> : null}
-      {data?.users?.pageInfo?.hasNextPage === true ? <button onClick={proximo}>proximo</button> : null}
-      <div className='botao-container'>
-        <button
-          className='botao'
-          onClick={() => {
-            navigate('/cadastro');
-          }}
-        >
-          +
-        </button>
       </div>
+      <ButtoCotainer className='container-botao'>
+        {data?.users?.pageInfo?.hasPreviousPage === true ? (
+          <Button style={{ width: '15%', marginRight: '3rem' }} type='button' onClick={anterior} value='anterior'></Button>
+        ) : null}
+        {data ? (
+          <div>
+            Página {Math.floor(offset / limit) + 1} de {paginas}
+          </div>
+        ) : null}
+        {data?.users?.pageInfo?.hasNextPage === true ? (
+          <Button style={{ width: '15%', marginLeft: '3rem' }} type='button' onClick={proximo} value='proximo'></Button>
+        ) : null}
+      </ButtoCotainer>
     </div>
   );
 }
